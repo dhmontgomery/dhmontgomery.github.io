@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>The Fast & The Mapped: QGIS Basics</title>
+
+
+<!-- test compiled and minified CSS -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="css/bootstrap-theme.min.css">
+
+<!-- My stylesheet -->
+<link rel="stylesheet" href="css/mapping.css">
+
+<!-- Minified jquery -->
+<script src="js/jquery-2.1.1.min.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="js/bootstrap.min.js"></script>
+
+</head>
+
+<body>
+	<div class="jumbotron">
+		<div class="container">
+    		<div class="row">
+    			<div class="col-lg-6 col-md-6 col-sm-12">
+    				<h1>The Fast & The Mapped: QGIS Basics</h1>
+    				<p class="lead">IRE 2017<br>
+                    Sunday, June 25, 2017</p>
+    				<p>Written by David H. Montgomery based on a presentation by Alexandra Kanik.</p>
+    			</div>
+    			<div class="col-lg-6 col-md-6 col-sm-12">
+    				<p>Not all datasets needs to be mapped, but some do! This mapping class is perfect for beginners looking to learn the basics of visualizing geographic data. We'll go over how to find publicly available data, convert addresses to map points, join datasets and use the open source mapping software, QGIS. <div class="btn btn-default"><a href="http://dhmontgomery.com/files/mapping-lesson/map_data.zip"><i class="glyphicon glyphicon-save-file"></i>Download the data</a></div></p>
+    			</div>
+            </div>
+		</div>
+	</div>
+	<div class="container">
+    	<div class="row">
+            <div class="col-xs-12">
+            	<h2>What types of data sets should be mapped, which shouldn't</h2>
+            	<p class="lead">Is there a geographical story?</p>
+            	<p class="lead">Would a table or chart tell the story just as well?</p>
+            	<p class="lead">Am I just mapping where people live?</p>
+            	<img src="https://imgs.xkcd.com/comics/heatmap.png"/>
+            </div>
+    	</div>
+    	
+    	<div class="row">
+            <div class="col-xs-12">
+            	<h2>What you can do with QGIS</h2>
+                <p class="lead">Analyze geographic data</p>
+                <p class="lead">Create static maps for display</p>
+                <p class="lead">Generate files for interactive map (CARTO or leaflet.js)</p>
+            </div>
+    	</div>
+    	
+    	<div class="row">
+            <div class="col-xs-12">
+            	<h2>Where to find geographic data: national, state, local</h2>
+            	<p>Alexandra Kanik tries to keep this <a href="https://github.com/akanik/mapping-resources">mapping resources doc</a> up to date. It could use some reworking and some additional resources, though, so feel free to contribute!</p>
+            	
+            	<h3>National data</h3>
+            	<p><a href="https://www.census.gov/geo/maps-data/data/tiger-line.html">Census shapefiles</a></br>
+            	<a href="http://catalog.data.gov/dataset?metadata_type=geospatial">DATA.GOV</a></br>
+            	<a href="https://nhgis.org/">National Historical Geographic Information System</a></p>
+            	
+            	<h3>State data</h3>
+            	<p>State government websites (such as the <a href="https://gisdata.mn.gov">Minnesota Geospatial Commons</a>)<br>
+            	College and university research centers (<a href="http://www.pasda.psu.edu/uci/SearchResults.aspx?shortcutKeyword=base&searchType=shortcut&sessionID=856688832201281116590">Penn State has this one for Pennsylvania</a>)<br>
+            	<a href="http://census.ire.org/">IRE Census data</a><br>
+            	<a href="https://www.nsgic.org/state-information">National States Geographic Information Council</a></p>
+            	
+            	<h3>Local data</h3>
+            	<p><a href="https://www.census.gov/cgi-bin/geo/shapefiles/index.php?year=2014&layergroup=Places">Census places</a> - Census places are defined as incorporated places, usually cities, towns, villages, or boroughs. You can read up more on that <a href="https://www.census.gov/geo/reference/gtc/gtc_place.html">here</a>.<br>
+            	Your local government should have shapefiles and other data that relate to your local region. Give them a call or visit their website. Here's the <a href="http://pittsburghpa.gov/dcp/gis/gis-data">GIS office for the City of Pittsburgh</a>.</p>
+        
+            </div>
+    	</div>
+    	
+    	<div class="row">
+            <div class="col-xs-12">
+            	<h2>Geocoding tools</h2>
+            	<p><a href="https://github.com/paldhous/refine-geocoder">Peter Aldhous's Refine geocoder</a> - this is nice because it uses geocoders that are, in most circumstances, legal to use. It also geocodes your data using two geocoders so you can compare the results. And it's free! Rate limits may apply.</p>
+            	<p><a href="https://www.census.gov/geo/maps-data/data/geocoder.html">Census geocoder</a> -  Free but I've found it to be a little less accurate. Rate limit: 1,000 addresses at a time.</p>
+            	<p>Here's a <a href="https://github.com/alexreisner/geocoder#street-address-services">more complete list</a> of geocoding tools and APIs</p>
+            </div>
+    	</div>
+    	
+    	
+		<div id="features" class="row">
+			<div class="col-xs-12">
+				<h2>Common data types</h2>
+				<h3>Shapefiles</h3>
+                <div class="col-md-5"><img class="img-responsive" src="img/shapefile-example.png" alt="file directory for shapefile" /></div>
+                <div class="clearfix">&nbsp;</div>
+                <ul>
+					<li>.shp - the feature geometry</li>
+					<li>.shx - positioning index of the feature geometry</li>
+					<li>.dbf - the data attributes for the features. This can be opened with editors like excel.</li>
+					<li>.prj - projection file. This can also be opened and analyzed. Especially if you're having projection issues.</li>
+				</ul>
+				
+				<h3>GeoJSON</h3>
+				<div class="col-md-5"><img src="img/geojson-example.png" alt="structure for a geojson file" class="img-responsive" /></div><br>
+				<div class="clearfix">&nbsp;</div>
+				
+				<h3>Delimited text layer</h3>
+				<p>CSV<br>
+    				<pre>id, city, state, population
+001, Pittsburgh, PA, 310885
+002, Columbus, OH, 822092</pre>
+    				TSV<br>
+    				<pre>id city    state   population
+001 Pittsburgh  PA  310885
+002 Columbus    OH  822092</pre>
+    				PSV<br>
+    				<pre>id|city|state|population
+001|Pittsburgh|PA|310885
+002|Columbus|OH|822092</pre>
+				</p>
+			</div>
+		</div>
+		
+		<div id="files" class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<h2>Types of GIS data</h2>
+				<h3>Raster</h3>
+				<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/37/Sasanian_Empire_alternate_background.png/640px-Sasanian_Empire_alternate_background.png"/>
+				<h3>Vector</h3>
+				<h4>Point</h4>
+				<img src="img/mapping-screenshots/moose.png"/>
+				<h4>Line</h4>
+				<img src="/portfolio/images/2015/02/log-roads-small.png"/>
+				<h4>Polygon</h4>
+				<img src="img/mapping-screenshots/cd2map.png"/>
+				
+				
+				<h2>What is a .qgs file?</h2>
+				<p>When you save a QGIS map file, it will save as a .qgs. This file is a configuration file. It basically just references the files that you load into QGIS. IT DOES NOT HOLD ANY OF YOUR DATA. This means if you move the shapefiles you load into your map after you save it, your map will break.</p>
+				<p>So establish a <b>working directory</b> for each map you work on. Put your shapefiles and your map file in there and don't move them around.</p>
+				<h3>This might seem like a weird, crappy way to organize things. But it's not. And here's why.</h3>
+				<p>QGIS isn't perfect, and neither are you. Sometimes you come up against errors in behavior that you can explain. So your only recourse is to shut 'er down and reopen the program.</p>
+				<p>And sometimes, that doesn't work either. So you need to scrap your map file.</p>
+				<p>Now, if all of your work depended on that one .qgs file, that would suck hardcore. But since your shapefiles and data are separate files, you're totally fine.</p>
+			</div>
+		</div>
+        
+        
+		<div id="projections" class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<h2 class="accordion"><a href="#projection-accordion" data-toggle="collapse">What is a projection?</a></h2>
+				<div id="projection-accordion" class="collapse">
+    				<p>So the earth is round, right? Turns out it's not the easiest thing to make something round and three-dimensional look flat. But to hell if we don't try.</p>
+    				<p>That's basically what projections are, flat representations of our round world. Lots of people have taken a stab at making the best projection, but not all projections are created equal.</p>
+    				<p>Depending on the scope and span of your data, you may want to stick to a more local, granular projection. But if you're trying to show the whole world things are going to get a little wonky at some point.</p>
+    				<p><a href="http://resources.esri.com/help/9.3/arcgisengine/dotnet/89b720a5-7339-44b0-8b58-0f5bf2843393.htm">More on projections >></a></p>
+    				
+    				<h4>Mapping projections from the 1936 Oxford Advanced Atlas compiled by John Bartholomew, cartographer to His Majesty the King</h4>
+    				<figure>
+    					<img class="img-responsive" src="img/projections-overview.JPG" alt="map projection overview">
+    				</figure>
+    				<figure class="col-lg-4 col-md-4 col-sm-12">
+    					<img class="img-responsive" src="img/projections-mercator.JPG" alt="mercator map projection, old">
+    				</figure>
+    				<figure class="col-lg-4 col-md-4 col-sm-12">
+    					<img class="img-responsive" src="img/projections-gores.JPG" alt="map projection gores">
+    				</figure>
+    				<figure class="col-lg-4 col-md-4 col-sm-12">
+    					<img class="img-responsive" src="img/projections-conic.JPG" alt="conic map projection">
+    				</figure>
+                </div>
+                <p><em>* I've collapsed this section because while it's very important to understand projections, they are also amazingly confusing and might serve only to confuse the novice map maker. Just know to return to this topic once you feel more comfortable with QGIS and displaying and analyzing geographic data in general.</em></p>
+			</div>
+		</div>
+		
+		
+		<div id="demo" class="row">
+			<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<h2>Demo</h2>
+				<p>In this demo, we're going to be creating a map looking at questions of transportation and equity in Washington, D.C.</p>
+				<p>Start by opening up QGIS, and clicking <code>Project</code> --> <code>New</code>.</p>
+				<p>This is a blank map.</p>
+				<img class="img-responsive" src="img/mapping-screenshots/adding-data-1.png" alt="blank QGIS worksheet" />
+				
+				
+				<h3>The working directory</h3>
+				<ul>
+					<li><a href="http://akanik.github.io/mapping-basics-2016/data/abandoned-pa-mines-data.zip">Download the data</a></li>
+					<li>Choose your working directory, and stick with it</li>
+				</ul>
+				<img class="img-responsive" src="img/mapping-screenshots/adding-data-4.png" alt="working directory screenshot" />
+				<p>A working directory is a place on your computer where you house all of your map shapefiles. Once a shapefile is added to the working directory, it should not be moved around because that can break the file path and therefore your map.</p>
+				<p>In the example above, <code>map-lesson</code> is the working directory.</p>
+				
+				<p><strong>This is what you'll see if you move layers and map files around</strong></p>
+				<img src="img/mapping-screenshots/lost-layer.png" alt="lost file screenshot" />
+				
+				<h3>Adding data</h3>
+				<p>We're going to be focusing on VECTOR LAYERS and DELIMITED TEXT LAYERS. These are the layers you will use most often.</p>
+				<h4>Adding vectors</h4>
+				<ul>
+					<li>Click the <img src="https://docs.qgis.org/2.18/en/_images/mActionNewVectorLayer.png" /> New Shapefile Layer button</li>
+					<li>Navigate to your working directory</li>
+					<li>Add <code>Washington_DC_Boundary</code> --> <code>Washington_DC_Boundary.shp</code></li>
+					<li>Let's pause here and play around a little with styling!</li>
+					</ul>
+					<h3>Styling</h3>
+				<ul>
+					<li>Right-click or double-click the layer</li>
+					<li>Select the Style tab</li>
+					<li>You can change parts of your styles on this screen. Or click <code>Simple fill</code> for more options!</li>
+					<li>Style accordingly</li>
+				</ul>
+				<img class="img-responsive" src="img/mapping-screenshots/styling.png" alt="styling layers screenshot" />
+					<h3>Adding more layers</h3>
+					<ul>
+					<li>Add <code>Potomac_poly</code> --> <code>Potomac_poly.shp</code> Style it to look a little more like a river.</li>
+					<li>Add <code>dc_poverty</code> --> <code>dc_poverty.shp</code></li>
+					<li>All your layers are listed in the panel on the left. Try rearranging the order.</li>
+					<li>The new <code>dc_poverty</code> layer we added is different from <code>Washington_DC_Boundary</code> and <code>Potomac_poly</code> — it actually contains data. In this case, it has Census estimates on poverty for every tract in Washington, D.C.</li>
+					<li>Click on the <code>dc_poverty</code> layer and click the <img src = "https://docs.qgis.org/2.18/en/_images/mActionOpenTable.png" style="width: 1.5em;"> icon in the toolbar to <b>Open Attribute Table</b>. (You can also do this by right-clicking/control-clicking the layer name on the left.) You should see this:</li>
+				</ul>
+				<img class="img-responsive" src="img/mapping-screenshots/attribute-table.png" alt="attribute table screenshot" />				
+				
+				
+				
+				<h3>Advanced styling</h3>
+				<p>We want to make this data show up on the map. To do this, we need to double-click the layer, like we styled it before.</p>
+				<p>But this time, click the dropdown menu at the top, where it says "Single symbol." Here we've got a number of options. Three are important:</p>
+				<ul>
+					<li>"Single symbol" just creates basic shapes — fixed color, lines and shapes.</li>
+					<li>"Categorized" determines your visuals based on categorical data — for example, if you wanted to color states red or blue depending on which party won them in a presidential election.</li>
+					<li>"Graduated" uses numerical data — for example, we're going to map Washington, D.C. tracts based on their poverty rate.</li>
+				</ul>
+				<p>Click "Graduated." There's a dropdown menu labeled "Column" where we can select the column of data we want to determine the appearance. If you click it, you should have two options: <code>population</code> and <code>poverty</code>. Click <code>poverty</code>. Then, lower down, click "Classify."</p>
+				<img class="img-responsive" src="img/mapping-screenshots/graduated-style.png" alt="graduated style screenshot" />
+				<p>After clicking "OK", you should see something like this:</p>
+				<img class="img-responsive" src="img/mapping-screenshots/graduated-style-map.png" alt="graduated style map screenshot" />
+				<p>You can customize this further on the properties page. For example, you can increase the number of classes you want to divide the data into. You can also choose the way QGIS divides up the data.</p>
+				<ul>
+					<li>The default is "Equal Interval", which divides your data into equal buckets based on the data — if your minimum is 0 and your maximum is 2000, then five buckets will be 400 wide.</li>
+					<li>"Quantile (Equal Count)" divides up data so that each category has the same number of observations in them, even if each category's data range is different.</li>
+					<li>"Natural Breaks (Jenks)" uses some fancy math to try to subdivide the data in a way that makes sense.</li>
+					<li>"Pretty Breaks" works like "Equal Interval", but it rounds your breakpoints off to round numbers — so instead of a category running from 0 to 485.8, it'll run from 0 to 500. I often use this when making maps for publication.</li>
+				</ul>
+				<p>There's something not right about our map. The <code>poverty</code> column we selected is just the Census's estimate of the number of people below poverty in each tract. But what we really want is the <b>percentage</b> of people in poverty, so we're not just mapping population. This is actually really easy to do.</p>
+				<p>Go back to the styling window and find the "Column" dropdown. Click it, and take note that our two columns are <code>poverty</code> and <code>population<code>. Click away from the dropdown, then click directly on the text where it says <code>poverty</code>. Now just type freely in the window so it says <code>poverty/population</code>! Click "Classify", and then "OK".</p>
+				<img class="img-responsive" src="img/mapping-screenshots/attribute-math.png" alt="attribute math screenshot" />
+				
+				<h3>Geographic analysis</h3>
+				<p>Add one last layer: <code>Bicycle_Lanes</code> --> <code>Bicycle_Lanes.shp</code>. This is a map of every bike lane in DC. Experiment with styling it.</p>
+				<p>Looking at this over the map of DC poverty, a pattern becomes pretty obvious — there are way fewer bike lanes in the poorer parts of D.C.</p>
+				<p>What if we wanted to quantify that? QGIS can do more than just edit the <b>appearance</b> of maps. It also has really robust analytical capabilities. We'll experiment with just one of those.</p>
+				<p>Click the <code>Vector</code> menu, then choose <code>Analysis Tools</code> --> <code>Sum Line Lengths</code>.</p>
+				<p>Here we can choose a Line layer and a Polygon layer. What we're going to do here is calculate the length of a line layer inside each element of a polygon layer. Or, in other words, we're going to find out how many miles of bike lanes are in each Census tract!</p>
+				<p>Make sure that you choose <code>Bicycle_Lanes</code> under "Lines" and <code>dc_poverty</code> under "Polygons". Then click "Run in Background", and "Close".</p>
+				<img class="img-responsive" src="img/mapping-screenshots/sum-lines.png" alt="sum line lengths screenshot" />
+				<p>A new layer has been added to our map, called <code>Line length</code>. Look at its Attribute Table. You can see it's the same as the <code>dc_poverty</code> attribute table — but with two extra columns. <code>COUNT</code> is the number of bike lanes in each tract. <code>LENGTH</code> is the total length of bike lanes. So we can see that "Census Tract 1" has a bike lane length of 422.58842. You might ask: 422.58842 what? Good question! QGIS can work with a variety of units, but the most common are degrees of latitude and longitude, and meters. Thankfully, this is in meters.</p>
+				<p>Experiment with styling this new layer!</p>
+				<p>Not all data is best visualized on a map. In this case, our comparison of bike lane length and poverty rate seems tailor-made for a graph. How can we do that? Right-click/control-click the <code>Line length</code> layer and choose <code>Export</code> --> <code>Save Features As</code>. Here we could save this as a Shapefile — that's the default option under "Format". Instead, let's export this as a spreadsheet. Choose <code>Comma Separated Value [CSV]</code>. Below it, click the <code>...</code> button next to "File Name" and save our new CSV in our working directory. Click OK!</p>
+				<p>Now we've saved that as a spreadsheet to our desktop for future analysis or graphing. (Note that QGIS also added this spreadsheet as a layer, too. QGIS can import spreadsheets! This is really helpful if you have a spreadsheet with geographic data that you want to join with a shapefile — but that's a lesson for another day.)
+				
+				<h3>Exporting</h3>
+				<p>So you've got a nice map here. What can you do with it?</p>
+				<p>There are ways to get from QGIS to an interactive map, but we're going to focus on something quicker: how to export a static image of your map.</p>
+				<p>There's two ways: one easy, and one more complex but powerful:</p>
+				<ul>
+					<li>The easy way: click Project > Save As Image.</li>
+					<li>The powerful way: click Project > New Print Composer</li>
+					<ul>
+						<li>Name your map</li>
+						<img class="img-responsive" src="img/mapping-screenshots/print-composer-1.jpg" alt="Print composer view" />
+						<li>Click the <img src="https://docs.qgis.org/testing/en/_images/mActionAddMap.png" /> add new map button. Draw a rectangle to fill the canvas.</li>
+						<li>Click the <img src="http://docs.qgis.org/testing/en/_images/mActionLabel.png" /> add label button. Draw a rectangle where you want a title.</li>
+						<li>In the sidebar, type what you want the label(s) to say, and choose a font and style.</li>
+						<img class="img-responsive" src="img/mapping-screenshots/print-composer-2.png" alt="Edit item properties" />
+						<li>Let's add a legend to the map. Click the <img src="https://docs.qgis.org/2.18/en/_images/mActionAddLegend.png" /> add legend button. Click in a vacant space on our map and click OK. You should see something like this:</li>
+						<img class="img-responsive" src="img/mapping-screenshots/print-composer-legend.png" alt="Add scale" />
+						<li>On the right, uncheck where it says "Auto update." Now let's remove layers we DON'T want on our legend by clicking on them and pressing the <img src="https://docs.qgis.org/2.18/en/_images/symbologyRemove.png" alt = "Remove layer"/> button. You can also click on layers and press the <img src="https://docs.qgis.org/2.18/en/_images/mActionProjectProperties.png" alt="Edit layer"> button to change how it displays. You can even do this for individual items — for example, if you want to display poverty rate as a percentage. You might want to end up with something like this:</li>
+						 <img class="img-responsive" src="img/mapping-screenshots/print-composer-legend2.png" alt="Final legend" />
+						 <li>You can do far more to adjust the appearance of your map — changing fonts, adding images like a CityLab logo, adding a credit line, adding inset maps, and more. We'll stop here for now, though. Click Layout > Export as Image. Pick a name and size.</li>
+						<li>Admire your handiwork.</li>
+					</ul>
+				</ul>
+				<img class="img-responsive" src="img/mapping-screenshots/print-composer-3.png" alt="Print composer result" />
+				
+				
+                <h2>You mean you want more mapping?</h2>
+                
+                <p>Go to <a href="http://qgis.org">qgis.org</a> to download the mapping program yourself.</p>
+                <p>This is only the very beginning of what's possible with QGIS. There are innumerable tutorials online, and I can also provide help if you want to explore yourself!</p>
+			</div>
+		</div>
+		
+		
+		
+		
+		
+	</div>
+</body>
+
+</html>
